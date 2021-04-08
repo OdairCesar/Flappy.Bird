@@ -1,4 +1,4 @@
-/* Criando as barreias */
+/* Criando as barreiras */
 function novoElemento(tagName, className) {
     const elem = document.createElement(tagName)
     elem.className = className
@@ -53,3 +53,40 @@ function ParDeBarreiras(altura, abertura, x) {
 /** TESTANDO A DUPLA DE BARREIRAS E SEU POSICIONAMENTO */
 //const b = new ParDeBarreiras(700, 200, 800)
 //document.querySelector('[wm-flappy]').appendChild(b.elemento)
+
+function Barreiras(altura, largura, abertura, espaco, notificarPonto) {
+
+    this.pares = [
+        new ParDeBarreiras(altura, abertura, largura),
+        new ParDeBarreiras(altura, abertura, largura + espaco),
+        new ParDeBarreiras(altura, abertura, largura + espaco * 2),
+        new ParDeBarreiras(altura, abertura, largura + espaco * 3)
+    ]
+
+    /** Fazendo o deslocamento das barreiras na tela */
+    const deslocamento = 3
+    this.animar = () => {
+        this.pares.forEach(par => {
+            par.setX(par.getX() - deslocamento)
+
+            //Quando o elemento sair da área da tela
+            if (par.getX() < -par.getLargura()) {
+                par.setX(par.getX() + espaco * this.pares.length)
+                par.sortearAbertura() //modificando a abertura da barreira para ela aparecer de forma diferente
+            }
+
+            //Adicionando ponto caso o personagem passe a barreira
+            const meio = largura / 2
+            const cruzouOMeio = par.getX() + deslocamento >= meio && par.getX() < meio
+            if (cruzouOMeio) notificarPonto()
+        })
+    }
+}
+/** TESTANDO A MOVIMENTAÇÃO DAS BARREIRAS NA TELA E A PONTUAÇÃO */
+//const barreiras = new Barreiras(700, 1200, 200, 400, 0)
+//const areaDoJogo = document.querySelector('[wm-flappy]')
+//console.log(barreiras.pares)
+//barreiras.pares.forEach(par => areaDoJogo.appendChild(par.elemento))
+//setInterval(() => {
+//    barreiras.animar()
+//}, 20)
