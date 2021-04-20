@@ -59,4 +59,5 @@
     right: 10px;
     font-family: Pixel;
     font-size: 18pt;
+    z-index: 100;
 }
